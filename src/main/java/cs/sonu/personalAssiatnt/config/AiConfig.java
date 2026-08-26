@@ -21,7 +21,7 @@ public class AiConfig {
 
         return GoogleAiGeminiChatModel.builder()
                 .apiKey(key)
-                .modelName("gemini-3.6-flash")
+                .modelName("gemini-3.5-flash-lite")
                 .returnThinking(true)
                 .sendThinking(true)
                 .temperature(0.1)

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import cs.sonu.personalAssiatnt.model.DocumentInfo;
 import cs.sonu.personalAssiatnt.storage.DocumentStorage;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -17,12 +18,22 @@ public class DocumentService {
     }
 
     public List<DocumentInfo> listDocuments(String folderName) {
-
         return documentStorage.listDocuments(folderName);
     }
 
     public DocumentInfo findDocument(String documentName) {
-
         return documentStorage.findDocument(documentName);
+    }
+
+    public Path getDocumentPath(String documentId) {
+        return documentStorage.getDocumentPath(documentId);
+    }
+
+    public List<DocumentInfo> listAllDocuments() {
+        return documentStorage.listAllDocuments();
+    }
+
+    public List<String> listFolders() {
+        return documentStorage.listFolders();
     }
 }

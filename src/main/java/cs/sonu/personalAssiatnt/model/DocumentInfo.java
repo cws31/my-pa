@@ -5,4 +5,5 @@ public record DocumentInfo(
         String name,
         String folder,
         String type) {
+            
 }

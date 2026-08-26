@@ -1,12 +1,19 @@
 package cs.sonu.personalAssiatnt.storage;
 
-import java.util.List;
-
 import cs.sonu.personalAssiatnt.model.DocumentInfo;
+
+import java.nio.file.Path;
+import java.util.List;
 
 public interface DocumentStorage {
 
     List<DocumentInfo> listDocuments(String folderName);
 
     DocumentInfo findDocument(String documentName);
+
+    Path getDocumentPath(String documentId);
+
+    List<DocumentInfo> listAllDocuments();
+
+    List<String> listFolders();
 }

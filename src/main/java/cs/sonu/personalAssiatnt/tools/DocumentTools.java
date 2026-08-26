@@ -38,4 +38,16 @@ public class DocumentTools {
 
         return documentService.findDocument(documentName);
     }
+
+    @Tool("List all available personal documents across all folders")
+    public List<DocumentInfo> listAllDocuments() {
+        System.out.println("TOOL CALLED -> listAllDocuments()");
+        return documentService.listAllDocuments();
+    }
+
+    @Tool("List all available document folders in the root directory")
+    public List<String> listFolders() {
+        System.out.println("TOOL CALLED -> listFolders()");
+        return documentService.listFolders();
+    }
 }
