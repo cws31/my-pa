@@ -54,6 +54,22 @@ public class AuthController {
 
         return ResponseEntity.ok("User registered successfully!");
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUserProfile(Authentication authentication) {
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserProfileResponse profileResponse = new UserProfileResponse(
+                user.getId(),
+                user.getFullName(),
+                user.getEmail());
+
+        return ResponseEntity.ok(profileResponse);
+    }
 }
 
 record LoginRequest(String email, String password) {
@@ -63,4 +79,7 @@ record RegisterRequest(String fullName, String email, String password) {
 }
 
 record JwtResponse(String token) {
+}
+
+record UserProfileResponse(Long id, String fullName, String email) {
 }
