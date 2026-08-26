@@ -95,4 +95,9 @@ public class DocumentController {
     public ResponseEntity<List<String>> getFolders() {
         return ResponseEntity.ok(documentService.listFolders());
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<cs.sonu.personalAssiatnt.model.DocumentInfo>> getAllDocuments() {
+        return ResponseEntity.ok(documentService.listAllDocuments());
+    }
 }
