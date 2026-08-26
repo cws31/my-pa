@@ -155,4 +155,32 @@ public class FileSystemDocumentStorage implements DocumentStorage {
             throw new IllegalStateException("Unable to list folders", e);
         }
     }
+
+    @Override
+    public void createFolder(String folderName) {
+        Path folderPath = rootPath.resolve(folderName).normalize();
+        validatePathInsideRoot(folderPath);
+
+        try {
+            Files.createDirectories(folderPath);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to create folder: " + folderName, e);
+        }
+    }
+
+    @Override
+    public void saveDocument(String folderName, org.springframework.web.multipart.MultipartFile file) {
+        Path folderPath = rootPath.resolve(folderName).normalize();
+        validatePathInsideRoot(folderPath);
+
+        try {
+            Files.createDirectories(folderPath);
+            Path targetPath = folderPath.resolve(file.getOriginalFilename()).normalize();
+            validatePathInsideRoot(targetPath);
+
+            file.transferTo(targetPath.toFile());
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to save document", e);
+        }
+    }
 }

@@ -50,4 +50,11 @@ public class DocumentTools {
         System.out.println("TOOL CALLED -> listFolders()");
         return documentService.listFolders();
     }
+
+    // @Tool("Create a new document folder")
+    // public String createFolder(@P("The name of the new folder") String
+    // folderName) {
+    // documentService.createFolder(folderName);
+    // return "Folder '" + folderName + "' created successfully.";
+    // }
 }

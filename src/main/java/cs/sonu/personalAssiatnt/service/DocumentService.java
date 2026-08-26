@@ -36,4 +36,12 @@ public class DocumentService {
     public List<String> listFolders() {
         return documentStorage.listFolders();
     }
+
+    public void createFolder(String folderName) {
+        documentStorage.createFolder(folderName);
+    }
+
+    public void saveDocument(String folderName, org.springframework.web.multipart.MultipartFile file) {
+        documentStorage.saveDocument(folderName, file);
+    }
 }

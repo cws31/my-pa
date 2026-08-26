@@ -16,4 +16,8 @@ public interface DocumentStorage {
     List<DocumentInfo> listAllDocuments();
 
     List<String> listFolders();
+
+    void createFolder(String folderName);
+
+    void saveDocument(String folderName, org.springframework.web.multipart.MultipartFile file);
 }
