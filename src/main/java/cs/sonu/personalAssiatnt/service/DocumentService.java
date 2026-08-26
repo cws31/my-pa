@@ -44,4 +44,12 @@ public class DocumentService {
     public void saveDocument(String folderName, org.springframework.web.multipart.MultipartFile file) {
         documentStorage.saveDocument(folderName, file);
     }
+
+    public void deleteDocument(String documentId) {
+        documentStorage.deleteDocument(documentId);
+    }
+
+    public void renameDocument(String documentId, String newName) {
+        documentStorage.renameDocument(documentId, newName);
+    }
 }

@@ -183,4 +183,35 @@ public class FileSystemDocumentStorage implements DocumentStorage {
             throw new IllegalStateException("Unable to save document", e);
         }
     }
+
+    @Override
+    public void deleteDocument(String documentId) {
+        Path filePath = rootPath.resolve(documentId).normalize();
+        validatePathInsideRoot(filePath);
+        try {
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to delete document: " + documentId, e);
+        }
+    }
+
+    @Override
+    public void renameDocument(String documentId, String newName) {
+        Path oldPath = rootPath.resolve(documentId).normalize();
+        validatePathInsideRoot(oldPath);
+
+        if (!Files.exists(oldPath)) {
+            throw new IllegalArgumentException("Document not found: " + documentId);
+        }
+
+        Path parentDir = oldPath.getParent();
+        Path newPath = parentDir.resolve(newName).normalize();
+        validatePathInsideRoot(newPath);
+
+        try {
+            Files.move(oldPath, newPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to rename document", e);
+        }
+    }
 }

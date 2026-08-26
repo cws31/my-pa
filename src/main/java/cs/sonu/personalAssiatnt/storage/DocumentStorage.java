@@ -20,4 +20,8 @@ public interface DocumentStorage {
     void createFolder(String folderName);
 
     void saveDocument(String folderName, org.springframework.web.multipart.MultipartFile file);
+
+    void deleteDocument(String documentId);
+
+    void renameDocument(String documentId, String newName);
 }

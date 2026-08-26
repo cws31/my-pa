@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/documents")
@@ -59,5 +60,39 @@ public class DocumentController {
     public ResponseEntity<String> createFolder(@RequestParam String folderName) {
         documentService.createFolder(folderName);
         return ResponseEntity.ok("Folder created successfully: " + folderName);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteDocument(@RequestParam String id) {
+        documentService.deleteDocument(id);
+        return ResponseEntity.ok("Document deleted successfully.");
+    }
+
+    @PutMapping("/rename")
+    public ResponseEntity<String> renameDocument(@RequestParam String id, @RequestParam String newName) {
+        documentService.renameDocument(id, newName);
+        return ResponseEntity.ok("Document renamed successfully.");
+    }
+
+    @PutMapping("/replace")
+    public ResponseEntity<String> replaceDocument(
+            @RequestParam String id,
+            @RequestParam("file") MultipartFile file) {
+
+        documentService.deleteDocument(id);
+
+        String folderName = "";
+        int lastSlash = id.lastIndexOf('/');
+        if (lastSlash != -1) {
+            folderName = id.substring(0, lastSlash);
+        }
+
+        documentService.saveDocument(folderName, file);
+        return ResponseEntity.ok("Document replaced successfully.");
+    }
+
+    @GetMapping("/folders")
+    public ResponseEntity<List<String>> getFolders() {
+        return ResponseEntity.ok(documentService.listFolders());
     }
 }
