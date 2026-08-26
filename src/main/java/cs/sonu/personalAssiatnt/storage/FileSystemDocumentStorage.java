@@ -146,10 +146,12 @@ public class FileSystemDocumentStorage implements DocumentStorage {
 
     @Override
     public List<String> listFolders() {
-        try (Stream<Path> paths = Files.list(rootPath)) {
+        try (Stream<Path> paths = Files.walk(rootPath)) {
             return paths
                     .filter(Files::isDirectory)
-                    .map(path -> path.getFileName().toString())
+                    .filter(path -> !path.equals(rootPath))
+                    .map(path -> rootPath.relativize(path).toString().replace("\\", "/"))
+                    .sorted()
                     .toList();
         } catch (IOException e) {
             throw new IllegalStateException("Unable to list folders", e);
