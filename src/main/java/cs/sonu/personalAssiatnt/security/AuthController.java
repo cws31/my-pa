@@ -2,6 +2,9 @@ package cs.sonu.personalAssiatnt.security;
 
 import cs.sonu.personalAssiatnt.model.User;
 import cs.sonu.personalAssiatnt.repository.UserRepository;
+
+import java.util.HashMap;
+import java.util.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,7 +55,12 @@ public class AuthController {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok("User registered successfully!");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "User registered successfully!");
+        response.put("email", user.getEmail());
+        response.put("name", user.getFullName());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")
