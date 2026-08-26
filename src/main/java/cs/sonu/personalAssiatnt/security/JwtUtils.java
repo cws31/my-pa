@@ -2,36 +2,50 @@ package cs.sonu.personalAssiatnt.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtUtils {
 
-    private final Key jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long jwtExpirationMs = 86400000; // 24 Hours
+    @Value("${app.jwtSecret:DefaultSecretKeyWhichShouldBeLongEnoughForHS256Algorithm}")
+    private String jwtSecret;
 
-    public String generateToken(String username) {
+    @Value("${app.jwtExpirationMs:86400000}")
+    private int jwtExpirationMs;
+
+    public Key getSignKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
+
+    public String generateToken(String email) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(jwtSecret)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    String getUsernameFromJwtToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(jwtSecret).build()
-                .parseClaimsJws(token).getBody().getSubject();
+    public String getUserNameFromJwtToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(authToken);
+            Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(authToken);
             return true;
         } catch (JwtException e) {
-            System.err.println("Invalid JWT token: " + e.getMessage());
+
         }
         return false;
     }
